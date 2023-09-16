@@ -1,0 +1,20 @@
+/* Apply Roboto Condensed to the entire body */
+body {
+    font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+/* Specific styles with !important flag */
+h1 {
+    font-size: 36px !important;
+}
+
+.product-view-p {
+	font-family: 'Roboto Condensed', sans-serif !important;
+    font-size: 16px !important;
+}
+
+@media (max-width: 576px) {
+  .justify-text-sm {
+    text-align: justify;
+  }
+}

@@ -5,8 +5,6 @@ import NewArrivals from '../components/NewArrivals.js';
 import FeaturedCollections from '../components/FeaturedCollections.js';
 import Sale from '../components/Sale.js';
 
-import AdminDashboard from '../components/AdminDashboard';
-
 export default function Home(){
 	return(
 		<>

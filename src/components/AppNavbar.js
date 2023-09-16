@@ -1,11 +1,12 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { PiUserLight, PiShoppingCartLight, PiMagnifyingGlassThin, PiGear } from "react-icons/pi";
-import { Link, NavLink } from 'react-router-dom';
-import { useState, useContext,useEffect } from 'react'
+import { Link } from 'react-router-dom';
+import { useContext } from 'react'
 
 import UserContext from '../UserContext'
 
 import SettingsModal from './SettingsModal'
+import ProductModal from './ProductModal'
 
 import logo1 from '../assets/app-titan-logo.png'
 
@@ -33,7 +34,7 @@ export default function AppNavbar(){
           <Nav.Link href="#link" className="px-1">
             {user.isAdmin ? (
               <Link to="/admin">
-                 <PiGear color="#1B1C1E" size="2em"/>
+                 <ProductModal color="#1B1C1E" size="2em"/>
                </Link>
             ) : (
               <PiShoppingCartLight color="#1B1C1E" size="2em" />
@@ -52,6 +53,7 @@ export default function AppNavbar(){
                   (
                     <>
                       <Nav.Link>Welcome to Admin Dashboard! </Nav.Link>
+                      <Nav.Link></Nav.Link>
                     </>
                   ) : 
                   (
@@ -77,6 +79,7 @@ export default function AppNavbar(){
             {user.isAdmin ? (
               <Link to="/admin">
                  <PiGear color="#1B1C1E" size="2em"/>
+                 <ProductModal color="#1B1C1E" size="2em"/>
                </Link>
             ) : (
               <PiShoppingCartLight color="#1B1C1E" size="2em" />

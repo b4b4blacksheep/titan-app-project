@@ -78,7 +78,6 @@ export default function AddProductForm() {
 
     const [showAlert, setShowAlert] = useState(false);
 
-
     const clearForm = () => {
       setFormData({
         productName: '',

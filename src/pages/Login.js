@@ -1,7 +1,7 @@
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import UserContext from '../UserContext'
 import Swal from 'sweetalert2';
@@ -11,9 +11,6 @@ export default function Register() {
 	const { user, setUser } = useContext(UserContext)
 	const [ email, setEmail] = useState('')
 	const [ password, setPassword ] = useState('')
-	
-	// Initialize useNavigate
-	const navigate = useNavigate()
 
 	// For determining if button is disabled or not
 	const [isActive, setIsActive] = useState(false)
@@ -103,6 +100,7 @@ export default function Register() {
 				    <Form.Group controlId="userEmail">
 				      <Form.Label className="loginSub">Email</Form.Label>
 				      <Form.Control 
+				      	autoComplete="off"
 				        className="loginText my-2"
 				        type="email" 
 				        placeholder="Email Address"
@@ -115,6 +113,7 @@ export default function Register() {
 				    <Form.Group controlId="password1">
 				      <Form.Label className="loginSub">Password</Form.Label>
 				      <Form.Control 
+				      	autoComplete="off"
 				        className="loginText mb-4"
 				        type="password" 
 				        placeholder="Password" 

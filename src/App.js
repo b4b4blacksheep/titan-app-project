@@ -2,14 +2,11 @@ import './App.css';
 import { useState } from 'react'
 import { UserProvider } from './UserContext'
 import AppNavbar from './components/AppNavbar';
-import AppPreFooter from './components/AppPreFooter';
 import AppFooter from './components/AppFooter';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Admin from './pages/Admin';
 import Order from './pages/Order';
-import AdminPanel from './components/AdminPanel';
 import OrderPanel from './components/OrderPanel';
 import UserSettings from './components/UserSettings';
 import ProductUpdate from './pages/ProductUpdate';
@@ -23,8 +20,6 @@ import Error from './components/Error';
 import Footwear from './pages/Footwear';
 import Apparel from './pages/Apparel';
 import Accessories from './pages/Accessories';
-
-import AdminDashboard from './components/AdminDashboard';
 
 import ContactUs from './components/AppContactUs'
 import About from './pages/About'
@@ -72,8 +67,7 @@ function App() {
               <Route path="/products/:productId" element={<ProductView/>}/>
 
 
-              <Route path="/admin" element={<AdminDashboard/>}/>
-              <Route path="/admin-panel" element={<AdminPanel/>}/>
+              <Route path="/admin-dashboard" element={<Home/>}/>
               <Route path="/admin/order-panel" element={<OrderPanel/>}/>
               <Route path="/admin/user-settings" element={<UserSettings/>}/>
 

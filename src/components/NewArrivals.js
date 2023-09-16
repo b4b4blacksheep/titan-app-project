@@ -18,7 +18,6 @@ const NewArrivals = () => {
         return response.json();
       })
       .then(data => {
-      	console.log(data); // Will display all fetched data from our database, starting with the latest addition first
         setProducts(data);
         setIsLoading(false);
       })

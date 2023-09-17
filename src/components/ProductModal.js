@@ -1,12 +1,10 @@
+import { useState, useEffect } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap';
 import { PiPlus } from "react-icons/pi";
 
 import SummaryModal from '../components/SummaryModal';
 
 import './style.css';
-
-
-import { useState } from 'react'
 
 export default function SettingsModal(){
 
@@ -77,7 +75,10 @@ export default function SettingsModal(){
 		productDescription: '',
 		productPrice: '',
 		productStatus: '',
+		onSaleValue: '',
 	});
+
+	const [ isOnSale, setIsOnSale ] = useState(false);
 
 	const [ sizes, setSizes ] = useState([{ id: 1, size: '', quantity: 0 }]);
 
@@ -112,6 +113,14 @@ export default function SettingsModal(){
 	  setImageLinks([]); // Empty array or initial state
 	}
 
+	useEffect(() => {
+	  if (formData.productStatus === "On-Sale") {
+	    setIsOnSale(true);
+	  } else {
+	    setIsOnSale(false);
+	  }
+	}, [formData.productStatus]);
+
 	return (
 		<>
 		<PiPlus title="Add Products1" onClick={handleShow} color="#1B1C1E" size="2em" />
@@ -121,6 +130,7 @@ export default function SettingsModal(){
 		  onHide={() => setShowSummary(false)}
 		  formData={formData}
 		  sizes={sizes}
+		  isOnSale={isOnSale}
 		  imageLinks={imageLinks}
 		  clearAllFields={clearAllFields}
 		/>
@@ -175,6 +185,10 @@ export default function SettingsModal(){
 				style={{ width: '50%' }}
 				>
 				<option disabled value="">Select Size</option>
+				<option value="3">3</option>
+				<option value="3">3.5</option>
+				<option value="4">4</option>
+				<option value="4.5">4.5</option>
 				<option value="5.5">5.5</option>
 				<option value="6">6</option>
 				<option value="6.5">6.5</option>
@@ -260,25 +274,59 @@ export default function SettingsModal(){
 		<Form.Control name="productSKU" value={formData.productSKU} autoComplete="off" onChange={handleInputChange} type="text" className="adminText" required placeholder="Enter SKU" />	
 		</Form.Group>
 
+{/*		<Form.Group className="mb-3" controlId="productStatus">
+			<Form.Label>Status<span className="required"> required</span></Form.Label>
+			<Form.Control
+			as="select"
+			name="productStatus"
+			autoComplete="off"
+			value={formData.productStatus}
+			onChange={handleInputChange}
+			className="adminText"
+			required
+			>
+			<option value="" disabled>Select Status</option>
+			<option className="adminText" value="On-Sale">On Sale</option>
+			<option className="adminText" value="Heat">Heat</option>
+			<option className="adminText" value="Rare">Rare</option>
+			<option className="adminText" value="Stock">Stock</option>
+			<option className="adminText" value="Others">Others</option>
+			</Form.Control>
+		</Form.Group>*/}
 		<Form.Group className="mb-3" controlId="productStatus">
-		<Form.Label>Status<span className="required"> required</span></Form.Label>
-		<Form.Control
-		as="select"
-		name="productStatus"
-		autoComplete="off"
-		value={formData.productStatus}
-		onChange={handleInputChange}
-		className="adminText"
-		required
-		>
-		<option value="" disabled>Select Status</option>
-		<option className="adminText" value="On-Sale">On Sale</option>
-		<option className="adminText" value="Heat">Heat</option>
-		<option className="adminText" value="Rare">Rare</option>
-		<option className="adminText" value="Stock">Stock</option>
-		<option className="adminText" value="Others">Others</option>
-		</Form.Control>
-		</Form.Group>
+        <Form.Label>Status<span className="required"> required</span></Form.Label>
+        <Form.Control
+          as="select"
+          name="productStatus"
+          autoComplete="off"
+          value={formData.productStatus}
+          onChange={handleInputChange}
+          className="adminText"
+          required
+        >
+          <option value="" disabled>Select Status</option>
+          <option className="adminText" value="On-Sale">On Sale</option>
+          <option className="adminText" value="Heat">Heat</option>
+          <option className="adminText" value="Rare">Rare</option>
+          <option className="adminText" value="Stock">Stock</option>
+          <option className="adminText" value="Others">Others</option>
+        </Form.Control>
+      </Form.Group>
+
+      {isOnSale && (
+        <Form.Group className="mb-3" controlId="onSaleValue">
+          <Form.Label>On-Sale Value<span className="required"> required</span></Form.Label>
+          <Form.Control
+            type="text"
+            name="onSaleValue"
+            autoComplete="off"
+            value={formData.onSaleValue}
+            onChange={handleInputChange}
+            className="adminText"
+            required
+          />
+        </Form.Group>
+      )}
 
 		<Form.Group className="mb-3" controlId="productColor">
 		<Form.Label>Color*<span className="required"> required</span></Form.Label>

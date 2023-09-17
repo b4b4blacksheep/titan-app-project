@@ -38,7 +38,7 @@ const Footwear = () => {
   return (
     <Container>
       <Breadcrumbs crumbs={crumbs} />
-      <h1 className="loginTitle">Accessories</h1>
+      <h1 className="loginTitle">Footwear</h1>
       <Row className="pb-5">
         {isLoading ? (
           <div className="center-loading">Loading...</div>
@@ -49,13 +49,26 @@ const Footwear = () => {
             <Col key={product._id} xs={12} sm={6} md={3} lg={3}>
               <Link to={`/products/${product._id}`} className="text-decoration-none text-dark">
                 <div className="homeHighlight px-3 highlight1">
-                  <img className="img-fluid my-2" src={product.imageLinks[0]} alt={`Logo ${index + 1}`} />
+                  <img 
+                    className="img-fluid my-2" 
+                    src={product.imageLinks[0]} 
+                    alt={`${product.name} by ${product.brand}`} 
+                  />
                   <h3 className="text-secondary">{product.brand}</h3>
-                  <h5>{product.name}</h5>
-                  <h5>₱{product.price.toLocaleString('en-US')}.00</h5>
+                  <h4>{product.name}</h4>
+                  
+                  {product.onSaleValue > 0 && (
+                    <h5 className="text-danger">₱{product.onSaleValue.toLocaleString('en-US')}.00</h5>
+                  )}
+                  {
+                    product.onSaleValue > 0 
+                    ? <h6><del>₱{product.price.toLocaleString('en-US')}.00</del></h6> 
+                    : <h5>₱{product.price.toLocaleString('en-US')}.00</h5>
+                  }
                 </div>
               </Link>
             </Col>
+
           ))
         )}
       </Row>

@@ -30,7 +30,8 @@ export default function Register() {
 			// Store the user details retrieved from the token into the global user state
 			setUser({
 				id: result._id,
-				isAdmin: result.isAdmin
+				isAdmin: result.isAdmin,
+				email: result.email
 			})
 		})
 	}

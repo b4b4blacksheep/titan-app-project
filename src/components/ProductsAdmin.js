@@ -2,8 +2,9 @@ import React, { useState, useEffect, useContext }from 'react';
 import { Nav, NavDropdown, Row, Col, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import '../assets/products-admin/styles.css';
 import UserContext from '../UserContext';
+
+import '../assets/products-admin/styles.css';
 
 const navItems = [
   {
@@ -29,11 +30,21 @@ const navItems = [
   {
     title: 'Accessories',
     id: 'accessories-dropdown',
-    description: 'sample descriptio2n',
+    description: 'In the Accessories Dropdown menu, administrators can choose from a variety of categories. When you select "All-Active," you can see all the accessories that are currently active and viewable by users and clients. Opting for the "Non-Active" category displays accessories that are currently marked as inactive, while the "Archived" category provides a list of accessories that have been previously archived.',
     links: [
-      { label: 'All-Active', link: '/admin/Accessories' },
-      { label: 'Non-Active', link: '/admin/Accessories' },
-      { label: 'Archived', link: '/admin/Accessories-archived' },
+      { label: 'All-Active', link: '/admin/all-active-accessories' },
+      { label: 'Non-Active', link: '/admin/non-active-accessories' },
+      { label: 'Archived', link: '/admin/archived-accessories' },
+    ],
+  },
+  {
+    title: 'Shop All',
+    id: 'brands-dropdown',
+    description:  `In the 'Shop All' Dropdown menu, administrators can navigate through diverse categories. By selecting 'All-Active,' you'll be able to view every active item or product, which are the same ones accessible to users and clients. If you choose the 'Non-Active' option, you will see items or products that are currently set to inactive status. The 'Archived' option will show you all items or products that have already been archived. `,
+    links: [
+      { label: 'All-Active', link: '/admin/active-shop-all' },
+      { label: 'Non-Active', link: '/admin/non-active-shop-all' },
+      { label: 'Archived', link: '/admin/archived-shop-all' },
     ],
   },
   {
@@ -41,19 +52,17 @@ const navItems = [
     id: 'brands-dropdown',
     description: 'sample description',
     links: [
-      { label: 'All-Active', link: '/admin/Brands' },
-      { label: 'Non-Active', link: '/admin/Brands' },
-      { label: 'Archived', link: '/admin/Brands-archived' },
-    ],
-  },
-  {
-    title: 'Shop All',
-    id: 'brands-dropdown',
-    description: 'sample description',
-    links: [
-      { label: 'All-Active', link: '/admin/Shop All' },
-      { label: 'Non-Active', link: '/admin/Shop All' },
-      { label: 'Archived', link: '/admin/Shop All-archived' },
+      { label: 'Adidas', link: '/admin/Brands' },
+      { label: 'Anta', link: '/admin/Brands' },
+      { label: 'Jordan Brand', link: '/admin/Brands-archived' },
+      { label: 'Mitchel & Ness', link: '/admin/Brands-archived' },
+      { label: 'New Era', link: '/admin/Brands-archived' },
+      { label: 'Nike', link: '/admin/Brands-archived' },
+      { label: 'Nike NBA', link: '/admin/Brands-archived' },
+      { label: 'Nike Sportswear', link: '/admin/Brands-archived' },
+      { label: 'Puma', link: '/admin/Brands-archived' },
+      { label: 'Slam', link: '/admin/Brands-archived' },
+      { label: 'Titan', link: '/admin/Brands-archived' },
     ],
   }
 ];
@@ -61,18 +70,15 @@ const navItems = [
 function ProductsAdmin() {
 
   const { user, setUser } = useContext(UserContext)
-
   console.log(user);
 
   const [ products, setProducts ] = useState([]);
   const [ isLoading, setIsLoading ] = useState(false);
   const [ error, setError ] = useState(null);
-  const [ selectedLink, setSelectedLink ] = useState('/new-arrivals'); // Initial default value
-  const [ selectedLabel, setSelectedLabel ] = useState('New-Arrivals'); // Initial default value
-  const [ selectedDescription, setSelectedDescription ] = useState('Welcome, Admin! You have exclusive access to manage the entire range of footwear, apparel, accessories, brands products on this platform. '); // Initial default value
-  console.log(selectedLink);
-  console.log(selectedLabel);
-  console.log(selectedDescription);
+  const [ selectedLink, setSelectedLink ] = useState('/new-arrivals');
+  const [ selectedLabel, setSelectedLabel ] = useState('New-Arrivals');
+  const [ selectedDescription, setSelectedDescription ] = useState('Welcome, Admin! You have exclusive access to manage the entire range of footwear, apparel, accessories, brands products on this platform. ');
+
 
   function selectItem(link, description) {
     setSelectedDescription(description);
@@ -107,18 +113,19 @@ function ProductsAdmin() {
   	    return response.json();
       })
       .then(data => {
-      	console.log("Fetched data:", data);  // Debugging line
+      	//console.log("Fetched data:", data);  // Debugging line
 	    setProducts(data);
 	    setIsLoading(false);
       })
       .catch(err => {
-        console.log("Error fetching:", err);  // Debugging line
+        //console.log("Error fetching:", err);  // Debugging line
         setError(err);
         setIsLoading(false);
       });
   }, [selectedLink]);
 
   return (
+
     <div className="products-admin-container py-2">
       <h2 className="text-center">Products Admin Panel</h2>
       <Nav variant="tabs" defaultActiveKey="/footwear" className="responsive-nav">
@@ -136,11 +143,11 @@ function ProductsAdmin() {
           {isLoading ? (
             <div className="center-loading">Loading...</div>
           ) :  error ? (
-  			<div className="center-loading">Error: {error.message}</div>  // Changed from 'Loading...' to 'Error'
-		  ) : (
+        <div className="center-loading">Error: {error.message}</div>  // Changed from 'Loading...' to 'Error'
+      ) : (
             products.slice(0, 8).map((product, index) => (
               <Col key={product._id} xs={12} sm={6} md={6} lg={4}>
-                 <Link to={`/products/admin/${product._id}`} className="text-decoration-none text-dark">
+                 <Link to={`/admin/${product._id}`} className="text-decoration-none text-dark">
                     <div className="homeHighlight px-3 highlight1">
                       <img className="img-fluid my-2" src={product.imageLinks[0]} alt={`Logo ${index + 1}`} />
                       <h3 className="text-secondary">{product.brand}</h3>

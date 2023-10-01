@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Button, Modal, Form } from 'react-bootstrap';
-import { PiPlus } from "react-icons/pi";
+import { Modal, Form, Alert } from 'react-bootstrap';
+import { PiPlus, PiPlusBold } from "react-icons/pi";
+import { RiCloseCircleLine, RiCheckboxCircleFill } from 'react-icons/ri';
 
 import SummaryModal from '../components/SummaryModal';
 
-import './style.css';
+import '../assets/admin/styles.css';
 
 export default function SettingsModal(){
 
@@ -27,7 +28,7 @@ export default function SettingsModal(){
 	 };
 
 	 const addSizeQuantity = () => {
-	   const newSize = { id: sizes.length + 1, size: '', quantity: 0 };
+	   const newSize = { id: sizes.length + 1, size: '', quantity: 5 };
 	   setSizes([...sizes, newSize]);
 	 };
 
@@ -121,6 +122,26 @@ export default function SettingsModal(){
 	  }
 	}, [formData.productStatus]);
 
+	const generateOptions = () => {
+	  const options = [];
+	  for (let i = 1; i <= 22; i += 0.5) {
+
+	    // Youth sizes 1-5 with "Y"
+	    if (i >= 1 && i <= 5) {
+	      options.push(<option key={`${i}Y`} value={`${i}Y`}>{`${i}Y`}</option>);
+	    }
+
+	    // Women's sizes 4-15 with "W" in front
+	    if (i >= 4 && i <= 15) {
+	      options.push(<option key={`W${i}`} value={`W ${i}`}>{`W ${i}`}</option>);
+	    }
+
+	    // Standard sizes 1-22
+	    options.push(<option key={i} value={i}>{i}</option>);
+	  }
+	  return options;
+	};
+
 	return (
 		<>
 		<PiPlus title="Add Products1" onClick={handleShow} color="#1B1C1E" size="2em" />
@@ -137,41 +158,66 @@ export default function SettingsModal(){
 
 		<Modal show={show} onHide={handleClose} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
 		<Modal.Header closeButton>
-			<Modal.Title>Create Products</Modal.Title>
+			<Modal.Title className="loginTitle">Create Products</Modal.Title>
 		</Modal.Header>
 		
 		<Modal.Body>
 		<Form>
 
+		{show && (
+		  <Alert variant="danger">
+		    <Alert.Heading className="loginSub fw-bold">Reminder!</Alert.Heading>
+		    <p className="m-0 loginText text-">
+		      All input labels containing an asterisk (*) are required fields.
+		    </p>
+		  </Alert>
+		)}
+
 		<Form.Group className="mb-3" controlId="productName">
-		<Form.Label>Name*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productName" value={formData.productName} autoComplete="off" onChange={handleInputChange} required type="text" className="adminText" placeholder="Enter product name" autoFocus />
+		<Form.Label className="inputLabel">Name<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productName" value={formData.productName} autoComplete="off" onChange={handleInputChange} required type="text" className="inputType" placeholder="Enter product name" autoFocus />
 		</Form.Group>
 
+{/*		<Form.Group className="mb-3" controlId="productBrand">
+		<Form.Label className="inputLabel">Brand<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productBrand" value={formData.productBrand} autoComplete="off" onChange={handleInputChange} type="text" className="inputType" required placeholder="Enter brand" />
+		</Form.Group>*/}
 		<Form.Group className="mb-3" controlId="productBrand">
-		<Form.Label>Brand*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productBrand" value={formData.productBrand} autoComplete="off" onChange={handleInputChange} type="text" className="adminText" required placeholder="Enter brand" />
+		  <Form.Label className="inputLabel">Brand<span className="inputRequired">*</span></Form.Label>
+		  <Form.Control className="inputType" as="select" name="productBrand" value={formData.productBrand} onChange={handleInputChange} required>
+		    <option value="" disabled>Select a brand</option>
+		    <option className="inputType" value="Nike">Nike</option>
+		    <option className="inputType" value="Jordan">Jordan</option>
+		    <option className="inputType" value="Adidas">Adidas</option>
+		    <option className="inputType" value="Anta">Anta</option>
+		    <option className="inputType" value="Mitchell & Ness">Mitchell & Ness</option>
+		    <option className="inputType" value="New Era">New Era</option>
+		    <option className="inputType" value="Nike NBA">Nike NBA</option>
+		    <option className="inputType" value="Nike Sportswear">Nike Sportswear</option>
+		    <option className="inputType" value="Puma">Puma</option>
+		  </Form.Control>
 		</Form.Group>
+
 
 		<Form.Group className="mb-3" controlId="productCategory">
-		<Form.Label>Category <span className="required"> required</span></Form.Label>
+		<Form.Label className="inputLabel">Category<span className="inputRequired">*</span></Form.Label>
 		<Form.Control
 		as="select"
 		name="productCategory"
 		autoComplete="off"
 		value={formData.productCategory}
 		onChange={handleInputChange}
-		className="adminText"
+		className="inputType"
 		required
 		>
 		<option value="" disabled>Select Category</option>
-		<option className="adminText" value="Apparel">Apparel</option>
-		<option className="adminText" value="Footwear">Footwear</option>
-		<option className="adminText" value="Accessories">Accessories</option>
-		<option className="adminText" value="Others">Others</option>
+		<option className="inputType" value="Apparel">Apparel</option>
+		<option className="inputType" value="Footwear">Footwear</option>
+		<option className="inputType" value="Accessories">Accessories</option>
+		<option className="inputType" value="Others">Others</option>
 		</Form.Control>
 
-		<Form.Label className="mt-3">Size and Quantity<span className="required"> required</span></Form.Label>
+		<Form.Label className="mt-3 inputLabel">Size and Quantity<span className="inputRequired">*</span></Form.Label>
 		<br/>
 		{sizes.map((inputField, index) => (
 			<div key={inputField.id} className="d-flex align-items-center my-2">
@@ -179,34 +225,13 @@ export default function SettingsModal(){
 				<Form.Control
 				as="select"
 				required
-				className="adminText"
+				className="inputType"
 				value={inputField.size}
 				onChange={(e) => handleSizeChange(e, index)}
 				style={{ width: '50%' }}
 				>
 				<option disabled value="">Select Size</option>
-				<option value="3">3</option>
-				<option value="3">3.5</option>
-				<option value="4">4</option>
-				<option value="4.5">4.5</option>
-				<option value="5.5">5.5</option>
-				<option value="6">6</option>
-				<option value="6.5">6.5</option>
-				<option value="7">7</option>
-				<option value="7.5">7.5</option>
-				<option value="8">8</option>
-				<option value="8.5">8.5</option>
-				<option value="9">9</option>
-				<option value="9.5">9.5</option>
-				<option value="10">10</option>
-				<option value="10.5">10.5</option>
-				<option value="11">11</option>
-				<option value="11.5">11.5</option>
-				<option value="12">12</option>
-				<option value="12.5">12.5</option>
-				<option value="13">13</option>
-				<option value="13.5">13.5</option>
-				<option value="14">14</option>
+					{generateOptions()}
 				</Form.Control>
 				)}
 
@@ -214,21 +239,22 @@ export default function SettingsModal(){
 				<Form.Control
 				as="select"
 				required
-				className="adminText"
+				className="inputType"
 				value={inputField.size}
 				onChange={(e) => handleSizeChange(e, index)}
 				style={{ width: '40%' }}
 				>
 				<option disabled value="">Select Size</option>
-				<option value="Extra-Small">Extra Small</option>
-				<option value="Small">Small</option>
-				<option value="Medium">Medium</option>
-				<option value="Large">Large</option>
-				<option value="Extra-Large">X-Large</option>
-				<option value="Extra-Extra-Large">XX-Large</option>
-				<option value="Triple-XL">xXX-Large</option>
-				<option value="Four-XL">4-XL</option>
-				<option value="Five-XL">5-XL</option>
+				<option value="XS">XS</option>
+				<option value="S">S</option>
+				<option value="M">M</option>
+				<option value="L">L</option>
+				<option value="XL">XL</option>
+				<option value="2XL">2XL</option>
+				<option value="3XL">3XL</option>
+				<option value="4XL">4XL</option>
+				<option value="5XL">5XL</option>
+				<option value="6XL">5XL</option>
 				</Form.Control>
 				)}
 
@@ -236,7 +262,7 @@ export default function SettingsModal(){
 				<Form.Control
 				as="select"
 				required
-				className="adminText"
+				className="inputType"
 				value={inputField.size}
 				onChange={(e) => handleSizeChange(e, index)}
 				style={{ width: '40%' }}
@@ -257,117 +283,113 @@ export default function SettingsModal(){
 			type="number"
 			required
 			autoComplete="off"
-			className="adminText mx-2"
+			className="inputType mx-2"
 			placeholder={`Enter Quantity ${index + 1}`}
 			value={inputField.quantity}
 			onChange={(e) => handleQuantityChange(e, index)}
 			style={{ width: '50%' }}
 			/>
-			<Button variant="danger" onClick={() => removeSizeQuantity(index)}>Remove</Button>
+
+			<RiCloseCircleLine size={32} color="#000000" onClick={() => removeSizeQuantity(index)} style={{ cursor: 'pointer' }} />
+
 			</div>
 			))}
 		</Form.Group>
-		<Button variant="outline-dark" className="my-2" onClick={addSizeQuantity}>Add Size & Quantity</Button>
+			<div style={{ textAlign: 'center' }}>
+			  <PiPlusBold size={24} color="#000" onClick={addSizeQuantity} style={{ cursor: 'pointer' }} />
+			</div>
+
+			<hr/>
 
 		<Form.Group className="mb-3" controlId="productSKU">
-		<Form.Label>SKU*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productSKU" value={formData.productSKU} autoComplete="off" onChange={handleInputChange} type="text" className="adminText" required placeholder="Enter SKU" />	
+		<Form.Label className="inputLabel">SKU<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productSKU" value={formData.productSKU} autoComplete="off" onChange={handleInputChange} type="text" className="inputType" required placeholder="Enter SKU" />	
 		</Form.Group>
 
-{/*		<Form.Group className="mb-3" controlId="productStatus">
-			<Form.Label>Status<span className="required"> required</span></Form.Label>
-			<Form.Control
-			as="select"
-			name="productStatus"
-			autoComplete="off"
-			value={formData.productStatus}
-			onChange={handleInputChange}
-			className="adminText"
-			required
-			>
-			<option value="" disabled>Select Status</option>
-			<option className="adminText" value="On-Sale">On Sale</option>
-			<option className="adminText" value="Heat">Heat</option>
-			<option className="adminText" value="Rare">Rare</option>
-			<option className="adminText" value="Stock">Stock</option>
-			<option className="adminText" value="Others">Others</option>
-			</Form.Control>
-		</Form.Group>*/}
 		<Form.Group className="mb-3" controlId="productStatus">
-        <Form.Label>Status<span className="required"> required</span></Form.Label>
+        <Form.Label className="inputLabel">Status<span className="inputRequired">*</span></Form.Label>
         <Form.Control
           as="select"
           name="productStatus"
           autoComplete="off"
           value={formData.productStatus}
           onChange={handleInputChange}
-          className="adminText"
+          className="inputType"
           required
         >
           <option value="" disabled>Select Status</option>
-          <option className="adminText" value="On-Sale">On Sale</option>
-          <option className="adminText" value="Heat">Heat</option>
-          <option className="adminText" value="Rare">Rare</option>
-          <option className="adminText" value="Stock">Stock</option>
-          <option className="adminText" value="Others">Others</option>
+          <option className="inputType" value="Stock">Stock</option>
+          <option className="inputType" value="On-Sale">On Sale</option>
+          <option className="inputType" value="Heat">Heat</option>
+          <option className="inputType" value="Rare">Rare</option>
+          <option className="inputType" value="Others">Others</option>
         </Form.Control>
       </Form.Group>
 
       {isOnSale && (
         <Form.Group className="mb-3" controlId="onSaleValue">
-          <Form.Label>On-Sale Value<span className="required"> required</span></Form.Label>
+          <Form.Label className="inputLabel">On-Sale Value<span className="inputRequired">*</span></Form.Label>
           <Form.Control
             type="text"
             name="onSaleValue"
             autoComplete="off"
             value={formData.onSaleValue}
             onChange={handleInputChange}
-            className="adminText"
+            className="inputType"
             required
           />
         </Form.Group>
       )}
 
 		<Form.Group className="mb-3" controlId="productColor">
-		<Form.Label>Color*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productColor" value={formData.productColor} autoComplete="off" onChange={handleInputChange} type="text" className="adminText" required placeholder="Enter color" />
+		<Form.Label className="inputLabel">Color<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productColor" value={formData.productColor} autoComplete="off" onChange={handleInputChange} type="text" className="inputType" required placeholder="Enter color" />
 		</Form.Group>
 
 		<Form.Group className="mb-3" controlId="productDescription">
-		<Form.Label>Description*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productDescription" value={formData.productDescription} onChange={handleInputChange} className="adminText my-2" as="textarea" required rows={8} />
+		<Form.Label className="inputLabel">Description<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productDescription" value={formData.productDescription} onChange={handleInputChange} className="inputType my-2" as="textarea" required rows={8} />
 		</Form.Group>
 
 		<Form.Group className="mb-3" controlId="productPrice">
-		<Form.Label>Price*<span className="required"> required</span></Form.Label>
-		<Form.Control name="productPrice" value={formData.productPrice} autoComplete="off" onChange={handleInputChange} type="number" className="adminText" required placeholder="Enter price" />
+		<Form.Label className="inputLabel">Price<span className="inputRequired">*</span></Form.Label>
+		<Form.Control name="productPrice" value={formData.productPrice} autoComplete="off" onChange={handleInputChange} type="number" className="inputType" required placeholder="Enter price" />
 		</Form.Group>
 
 		<Form.Group className="mb-3" controlId="exampleForm.ControlInputImages">
-		<Form.Label>Image Links*<span className="required"> required</span></Form.Label>
+		<Form.Label className="inputLabel">Image Links<span className="inputRequired">*</span></Form.Label>
 		{imageLinks.map((inputField, index) => (
 			<div key={inputField.id} className="d-flex align-items-center my-2">
 			<Form.Control
 			type="text"
 			required
 			autoComplete="off"
-			className="adminText mx-2"
+			className="inputType mx-2"
 			placeholder={`Enter Image Link ${index + 1}`}
 			value={inputField.link}
 			onChange={(e) => handleChange(e, index)}
 			/>
-			<Button variant="danger" onClick={() => removeImageLink(index)}>Remove</Button>
+			<RiCloseCircleLine size={28} color="#000000" onClick={() => removeImageLink(index)} style={{ cursor: 'pointer' }} />
+
 			</div>
 			))}
 		</Form.Group>
-		<Button variant="outline-dark" onClick={addImageLink}>Add more image links</Button>
-
+		<div style={{ textAlign: 'center' }}>
+		  <PiPlusBold size={24} color="#000" onClick={addImageLink} style={{ cursor: 'pointer' }} />
+		</div>
 
 		</Form>
 		</Modal.Body>
 
 		<Modal.Footer>
-		    <Button variant="dark" disabled={!isFormValid()} onClick={handleCreateProduct}>Create Product</Button>
+		    <div className="flex-center">  {/* Assuming you have a flex-center class for centering */}
+		      <RiCheckboxCircleFill
+		        size={30}  // Adjust the size as you like
+		        color={!isFormValid() ? 'gray' : 'green'}  // Change the color if disabled
+		        onClick={isFormValid() ? handleCreateProduct : null}
+		        style={{ cursor: isFormValid() ? 'pointer' : 'not-allowed' }}
+		      />
+		    </div>
 		</Modal.Footer>
 		</Modal>
 		</>

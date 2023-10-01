@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
-import './style.css'
+// import './style.css'
 
-export default function MyForm () {
+export default function ContactUs () {
   return (
     <Container>
       <Row className="justify-content-md-center">

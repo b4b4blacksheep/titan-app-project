@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './style.css'
+// import './style.css'
 
 import ImgStoreLocator1 from '../assets/app-titan-store-locator-1.png';
 import ImgStoreLocator2 from '../assets/app-titan-store-locator-2.png';

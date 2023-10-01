@@ -24,3 +24,27 @@
     width: 100%;
   }
 }
+
+.primaryAdd {
+  font-size: 12px !important;
+  font-family: Arial, sans-serif;
+  line-height: 0.3;
+}
+
+
+@media (min-width: 768px) { /* for md and up */
+  .text-center-sm {
+    text-align: inherit !important;
+  }
+}
+
+@media (max-width: 767px) { /* for sm and below */
+  .text-center-sm {
+    text-align: center !important;
+  }
+}
+
+.clickable-text {
+  cursor: pointer;
+}
+

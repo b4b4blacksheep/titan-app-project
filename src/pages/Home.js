@@ -10,27 +10,27 @@ import FeaturedCollections from '../components/FeaturedCollections.js';
 import Sale from '../components/Sale.js';
 import AdminPanel from '../components/AdminPanel';
 
-export default function Home(){
+import '../assets/home/styles.css';
 
-	const { user, setUser } = useContext(UserContext)
 
-	console.log(user);
+export default function Home() {
+  
+  const { user, setUser } = useContext(UserContext);
 
-	return (
-	<div>
-		{user.isAdmin === null ? (
-			<>
-			  <Landing />
-			  <NewArrivals />
-			  <FeaturedCollections />
-			  <Adidas />
-			  <Sale />
-			  <Banner />
-			</>
-		) : (
-			<AdminPanel />
-		)}
-		</div>
-	);
+  return (
+    <div>
+      {user.isAdmin ? (
+        <AdminPanel data-aos="fade-up" />
+      ) : (
+        <>
+          <div data-aos="fade-up"><Landing /></div>
+          <div data-aos="fade-left"><NewArrivals /></div>
+          <div data-aos="fade-right"><FeaturedCollections /></div>
+          <div data-aos="fade-up"><Adidas /></div>
+          <div data-aos="fade-right"><Sale /></div>
+          <div data-aos="fade-zoom-in"><Banner /></div>
+        </>
+      )}
+    </div>
+  );
 }
-

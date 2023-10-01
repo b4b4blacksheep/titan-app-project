@@ -1,0 +1,31 @@
+.inputLabel {
+	font-size: 14px !important;
+	font-family: Arial, sans-serif;
+}
+
+.inputRequired {
+	color: red;
+}
+
+.inputType {
+	font-size: 12px !important;
+	font-family: Arial, sans-serif;
+}
+
+.tableLabel {
+	font-size: 16px !important;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+	color: #999999 ;
+}
+
+.summaryLabel {
+	font-size: 14px !important;
+	font-family: Arial, sans-serif;
+	font-weight: bold;
+}
+
+.summaryType {
+	font-size: 12px !important;
+	font-family: Arial, sans-serif;
+}

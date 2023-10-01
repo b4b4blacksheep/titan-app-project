@@ -1,72 +1,72 @@
-import { useState, useEffect, useContext } from 'react';
-import { Container, Card, Button, Row, Col, ButtonGroup, ToggleButton } from 'react-bootstrap';
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import UserContext from '../UserContext'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
-import ScrollToTop from './ScrollToTop'
+import axios from 'axios';
 
-import InnerImageZoom from 'react-inner-image-zoom'
+import CustomBlkButton from '../components/CustomBlkButton';
 
-import './style.css';
+import '../assets/product-view/styles.css';
 
-import Swal from 'sweetalert2'
+const apiUrl = process.env.REACT_APP_API_URL;
 
-import Sale from '../components/Sale';
-// AddToCart.js
-const AddToCart = (productId) => {
+const AddToCart = ({ selectedSize, productId, user }) => {
+  const navigate = useNavigate();
 
-	const navigate = useNavigate()
-	
-	const [ itemId, setItemId ] = useState('');
-	const [ userId, setUserId ] = useState('');
-	const [ quantity, setQuantity ] = useState('');
-	const [ size, setSize ] = useState('');
+  console.log({ selectedSize, productId, user })
 
-  // Your logic for adding to the cart
-  // This will be executed when the button is clicked
-	const enroll = (productId) => {
+  const enroll = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
+      const body = {
+        items: [
+          {
+            "productId": productId,
+            "size": selectedSize
+          }
+        ],
+      };
 
-		
-		//fetch(`${process.env.REACT_APP_API_URL}/orders/create-order`, {
-		fetch(`http://localhost:8001/cart/add-to-cart`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('token')}`
-			},
-			body: JSON.stringify({
-				items: [
-					{
-						"productId": itemId,
-						"quantity": quantity,
-						"size": size,
-						"userId": userId
-					}
-				]
-			})
-		})
+      const response = await axios.post(`${apiUrl}/cart/add-to-cart`, body, config);
 
-		.then(response => response.json())
-		.then(result => {
+      if (response.data) {
+        Swal.fire({
+          title: "Success!",
+          text: "You have added the product to the cart successfully!"
+        });
+        navigate('/collections/shop-all');
+      } else {
+        Swal.fire({
+          title: "Something went wrong!",
+          text: "Please try again :("
+        });
+      }
+    } catch (error) {
+      console.error('Something went wrong:', error);
+      Swal.fire({
+        title: "Something went wrong!",
+        text: "Please try again :("
+      });
+    }
+  };
 
-				if(result) {
-					Swal.fire({
-						title: "Success!",
-						icon: "success",
-						text: "You have order the product successfully!"
-					})
-					navigate('/')
-
-				} else {
-
-					Swal.fire({
-						title: "Something went wrong!",
-						icon: "error",
-						text: "Please try again :("
-					})
-				}
-			})
-	}
+  return (
+    <>
+      <CustomBlkButton
+        label="Add to cart"
+        customClass="w-100"
+        disabled={!selectedSize}
+        onClick={enroll}
+        variant="black"
+      />
+    </>
+  );
 };
 
 export default AddToCart;

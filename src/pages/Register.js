@@ -1,237 +1,263 @@
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Container, Row, Col } from 'react-bootstrap';
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
+import axios from 'axios';
+
+import { PiEye, PiEyeSlash } from 'react-icons/pi';
+import CustomBlkButton from '../components/CustomBlkButton';
 
 import UserContext from '../UserContext';
 import Swal from 'sweetalert2';
 
 export default function Register() {
-	// Activity
-	const {user, setUser} = useContext(UserContext)
-	const navigate = useNavigate()
-	// Activity END
+
+  const { user } = useContext(UserContext)
+  const navigate = useNavigate()
+  
+  const [alertMessage, setAlertMessage] = useState('');
+
+  const [ isPassword1Visible, setIsPassword1Visible ] = useState(false);
+  const [ isPassword2Visible, setIsPassword2Visible ] = useState(false);
+
+  const [ firstName, setFirstName ] = useState('')
+  const [ lastName, setLastName ] = useState('')
+  const [ mobileNumber, setMobileNumber ] = useState('');
+
+  const [ agree, setAgree ] = useState('')
+  const [ email, setEmail ] = useState('')
+  const [ password1, setPassword1 ] = useState('')
+  const [ password2, setPassword2 ] = useState('')
+
+  const [ isActive, setIsActive ] = useState(false)
+
+  function registerUser(event) {
+    event.preventDefault();
+
+    axios.post('http://localhost:8001/users/check-email', {
+      email: email
+    })
+    .then(response => {
+      const result = response.data;
+      console.log(result);
+
+      if(result === true) {
+        Swal.fire({
+          title: 'Oops!',
+          icon: 'error',
+          text: 'Email already exists!'
+        });
+        navigate('/login');
+      } else {
+        return axios.post('http://localhost:8001/users/register', {
+          firstName: firstName,
+          lastName: lastName,
+          mobileNo: mobileNumber,
+          email: email,
+          password: password1,
+          mobileNumber: mobileNumber
+        });
+      }
+    })
+    .then(response => {
+      if(response) {
+        const result = response.data;
+        console.log(result);
+
+        setEmail('');
+        setPassword1('');
+        setPassword2('');
+        setFirstName('');
+        setLastName('');
+        setMobileNumber('');
+        setAgree('');
+
+        if(result.error) {
+          Swal.fire({
+            title: 'Registration Failed',
+            text: "Error creating an account!"
+          });
+          navigate('/register');
+        } else {
+          Swal.fire({
+            title: 'Register Successful!',
+            text: 'You may now login!'
+          });
+          navigate('/login');
+        }
+      }
+    })
+    .catch(error => {
+      console.error("There was an error!", error);
+    });
+  }
 
 
-	const [firstName, setFirstName] = useState('')
-	const [lastName, setLastName] = useState('')
-	const [mobileNumber, setMobileNumber] = useState('')
+  useEffect(() => {
+    let alert = '';
 
-	const [agree, setAgree] = useState('')
-	const [email, setEmail] = useState('')
-	const [password1, setPassword1] = useState('')
-	const [password2, setPassword2] = useState('')
+    if (firstName === '' || lastName === '' || mobileNumber === '' || email === '' || password1 === '' || password2 === '') {
+      alert = 'All fields are required!';
+    } else if (mobileNumber.length !== 11) {
+      alert = 'Mobile number should be 11 digits';
+    } else if (password1 !== password2) {
+      alert = 'Passwords do not match';
+    } else if (!agree) {
+      alert = 'You must agree to the terms and conditions';
+    } else {
+      alert = '';
+    }
 
-	// For determining if button is disabled or not
-	const [isActive, setIsActive] = useState(false)
+    setAlertMessage(alert);
 
+    console.log(alert)
 
-	function registerUser(event){
-		event.preventDefault()
+    if (alert === '') {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [firstName, lastName, mobileNumber, email, password1, password2, agree]);
 
-		//fetch(`${process.env.REACT_APP_API_URL}/users/check-email`, {
-		//fetch(`https://titan-api.onrender.com/users/check-email`, {
-		fetch(`http://localhost:8001/users/check-email`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				email: email
-			})
-		})
-		.then(response => response.json())
-		.then(result => {
-			console.log(result)
-			if(result === true) {
-				Swal.fire({
-					title: 'Oops!',
-					icon: 'error',
-					text: 'Email already exist!'
-				})
+  return (
+    (user.id !==null) ?
+      <Navigate to="/"/>
+    :
 
-				navigate('/login')
-			} else {
+    <Container>
+      <Row className="w-100">
+        <Col xs={12} md={8} lg={5} className="mx-auto">
+          <Form onSubmit={event => registerUser(event)}>
+            <h1 className="loginTitle pb-4">Create Account</h1>  
+            <Form.Group controlId="firstName">
+                  <Form.Label className="loginSub">First Name</Form.Label>
+                    <Form.Control
+                      className="loginText my-2" 
+                        type="text" 
+                        placeholder="First Name"
+                        value={firstName} 
+                        onChange={event => setFirstName(event.target.value)}
+                        required
+                    />
+              </Form.Group>
 
-				//fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
-				//fetch(`https://titan-api.onrender.com/users/register`, {
-				fetch(`http://localhost:8001/users/register`, {
-					method: 'POST',
-					headers: {
-						'Content-Type' : 'application/json'
-					},
-					body: JSON.stringify({
-						firstName: firstName,
-						lastName: lastName,
-						mobileNo: mobileNumber,
-						email:email,
-						password: password1
-					})
-				})
-				.then(response => response.json())
-				.then(result => {
+              <Form.Group controlId="lastName">
+                  <Form.Label className="loginSub">Last Name</Form.Label>
+                    <Form.Control
+                      className="loginText my-2" 
+                        type="text" 
+                        placeholder="Last Name"
+                        value={lastName} 
+                        onChange={event => setLastName(event.target.value)}
+                        required
+                    />
+              </Form.Group>
 
-					setEmail('');
-					setPassword1('');
-					setPassword2('');
-					setFirstName('');
-					setLastName('');
-					setMobileNumber('');
-					setAgree('');
+              <Form.Group controlId="mobileNumber">
+                  <Form.Label className="loginSub">Mobile Number</Form.Label>
+                    <Form.Control
+                      className="loginText my-2" 
+                        type="text" 
+                        placeholder="Mobile Number"
+                        value={mobileNumber} 
+                        onChange={event => setMobileNumber(event.target.value)}
+                        required
+                    />
+              </Form.Group>
 
-					if(result){
-						Swal.fire({
-							title: 'Register Successful!',
-							text: 'You may now login!'
-						})
-						
-						navigate('/login')
+              <Form.Group controlId="userEmail">
+                  <Form.Label className="loginSub">Email address</Form.Label>
+                    <Form.Control
+                      className="loginText my-2" 
+                        type="email" 
+                        placeholder="Email"
+                        value={email} 
+                        onChange={event => setEmail(event.target.value)}
+                        required
+                    />
+              </Form.Group>
 
-					} else {
-						Swal.fire({	
-							title: 'Registration Failed',
-							icon: 'error',
-							text: "Tropa, mukang mali ang iyong inilagay! :("
-						})
-					}		
-				})
-			}
-		})
+              <Form.Group controlId="password1">
+                <Form.Label className="loginSub">Password</Form.Label>
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    className="loginText my-2"
+                    type={isPassword1Visible ? "text" : "password"}
+                    placeholder="Password"
+                    value={password1}
+                    onChange={event => setPassword1(event.target.value)}
+                    required
+                  />
+                  <div 
+                    style={{
+                      position: 'absolute', 
+                      top: '50%', 
+                      right: '10px', 
+                      cursor: 'pointer',
+                      transform: 'translateY(-50%)'
+                    }}
+                    onClick={() => setIsPassword1Visible(!isPassword1Visible)}
+                  >
+                    {isPassword1Visible ? <PiEye /> : <PiEyeSlash />}
+                  </div>
+                </div>
+              </Form.Group>
 
-	}
-	
-	function authenticate(event){
-		event.preventDefault(event)
+              <Form.Group controlId="password2">
+                <Form.Label className="loginSub">Verify Password</Form.Label>
+                <div style={{ position: 'relative' }}>
+                  <Form.Control
+                    className="loginText my-2"
+                    type={isPassword2Visible ? "text" : "password"}
+                    placeholder="Verify Password"
+                    value={password2}
+                    onChange={event => setPassword2(event.target.value)}
+                    required
+                  />
+                  <div 
+                    style={{
+                      position: 'absolute', 
+                      top: '50%', 
+                      right: '10px', 
+                      cursor: 'pointer',
+                      transform: 'translateY(-50%)'
+                    }}
+                    onClick={() => setIsPassword2Visible(!isPassword2Visible)}
+                  >
+                    {isPassword2Visible ? <PiEye /> : <PiEyeSlash />}
+                  </div>
+                </div>
+              </Form.Group>
 
-		localStorage.setItem('email', email)
+                  <Form.Group controlId="agree">
+                    {['checkbox'].map((type) => (
+                          <div key={`default-${type}`} className="loginText my-3">
+                            <Form.Check 
+                              required
+                              label={` I have read and agreed to TIT4N 24's Terms and Conditions.`}
+                              onChange={e => setAgree(e.target.checked)}
+                            />
+                          </div>
+                    ))}
+                  </Form.Group>
 
-		setUser({
-			email: localStorage.getItem('email')
-		})
+                  <p className="text-danger loginText">{alertMessage}</p>
 
-		setEmail('')
+                  <CustomBlkButton 
+                    label="Submit"
+                    type="submit"
+                    variant="black"
+                    disabled={!isActive}
+                    customClass="px-5"
+                  />
 
-		navigate('/')
-	}
-
-
-	useEffect(() => {
-		if((firstName !== '' && lastName !== '' && mobileNumber.length === 11 && email !== '' && password1 !== '' && password2 !== '') && (password1 === password2)){
-			setIsActive(true)
-		} else {
-			setIsActive(false)
-		}
-	}, [firstName, lastName, mobileNumber, email, password1, password2, agree])
-
-	return (
-		(user.id !==null) ?
-			<Navigate to="/"/>
-		:
-
-		<Container>
-			<Row className="w-100">
-				<Col xs={12} md={8} lg={5} className="mx-auto">
-					<Form onSubmit={event => registerUser(event)}>
-						<h1 className="loginTitle">Create Account</h1>	
-						<Form.Group controlId="firstName">
-					        <Form.Label className="loginSub">First Name</Form.Label>
-						        <Form.Control
-						        	className="loginText my-2" 
-						            type="text" 
-						            placeholder="First Name"
-						            value={firstName} 
-						            onChange={event => setFirstName(event.target.value)}
-						            required
-						        />
-					    </Form.Group>
-
-					    <Form.Group controlId="lastName">
-					        <Form.Label className="loginSub">Last Name</Form.Label>
-						        <Form.Control
-						        	className="loginText my-2" 
-						            type="text" 
-						            placeholder="Last Name"
-						            value={lastName} 
-						            onChange={event => setLastName(event.target.value)}
-						            required
-						        />
-					    </Form.Group>
-
-					    <Form.Group controlId="mobileNumber">
-					        <Form.Label className="loginSub">Mobile Number</Form.Label>
-						        <Form.Control
-						        	className="loginText my-2" 
-						            type="text" 
-						            placeholder="Mobile Number"
-						            value={mobileNumber} 
-						            onChange={event => setMobileNumber(event.target.value)}
-						            required
-						        />
-					    </Form.Group>
-
-					   	<Form.Group controlId="userEmail">
-					        <Form.Label className="loginSub">Email address</Form.Label>
-						        <Form.Control
-						        	className="loginText my-2" 
-						            type="email" 
-						            placeholder="Email"
-						            value={email} 
-						            onChange={event => setEmail(event.target.value)}
-						            required
-						        />
-					    </Form.Group>
-
-			            <Form.Group controlId="password1">
-			                <Form.Label className="loginSub">Password</Form.Label>
-			                <Form.Control 
-			                	className="loginText my-2"
-				                type="password" 
-				                placeholder="Password" 
-				                value={password1} 
-						        onChange={event => setPassword1(event.target.value)}
-				                required
-			                />
-			            </Form.Group>
-
-			            <Form.Group controlId="password2">
-			                <Form.Label className="loginSub">Verify Password</Form.Label>
-			                <Form.Control
-			                	className="loginText mb-4" 
-				                type="password" 
-				                placeholder="Verify Password" 
-				                value={password2} 
-						        onChange={event => setPassword2(event.target.value)}
-				                required
-			                />
-			            </Form.Group>
-
-			            <Form.Group controlId="agree">
-				            {['checkbox'].map((type) => (
-			                    <div key={`default-${type}`} className="mb-3">
-			                      <Form.Check 
-			                      	required
-			                        label={` I have read and agreed to TIT4N 24's Terms and Conditions.`}
-			                      />
-			                    </div>
-				            ))}
-			            </Form.Group>
-
-			            {	isActive ? 
-			            		<Button className="btnWhite px-5" variant="dark" type="submit" id="submitBtn">
-					            	Submit
-					            </Button>
-					            :
-					            <Button className="btnWhite px-5" variant="dark" type="submit" id="submitBtn" disabled>
-					            	Submit
-					            </Button>
-			            }
-
-				        <Form.Group className="py-3">
-					            <a href="/login" class="btnBlack text-decoration-none">Login </a>
-					            <a href="/home" class="btnBlack1 text-decoration-none">Return to Store</a>
-				        </Form.Group>
-					</Form>
-				</Col>
-			</Row>
-		</Container>
-	)
+                <Form.Group className="py-3 d-flex justify-content-between">
+                      <Link to="/login" className="text-decoration-none loginText">Login</Link>
+                      <Link to="/home" className="text-decoration-none loginText">Return to Store</Link>
+                </Form.Group>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
+  )
 }
+

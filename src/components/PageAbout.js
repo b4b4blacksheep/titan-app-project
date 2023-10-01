@@ -7,7 +7,7 @@ import ImgAbout2 from '../assets/app-titan-about-2.png';
 import ImgAbout3 from '../assets/app-titan-about-3.png';
 
 
-import './style.css'
+// import './style.css'
 
 export default function PageAbout () {
   return (

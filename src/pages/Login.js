@@ -1,4 +1,4 @@
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useContext } from 'react'
 import { Navigate } from 'react-router-dom'
@@ -6,81 +6,83 @@ import { Navigate } from 'react-router-dom'
 import UserContext from '../UserContext'
 import Swal from 'sweetalert2';
 
-export default function Register() {
-	// Initializes the use of properties from the UserProvider in App.js file
+import axios from 'axios';
+
+import CustomBlkButton from '../components/CustomBlkButton';
+
+import '../assets/login/styles.css';
+
+
+export default function Login() {
+
 	const { user, setUser } = useContext(UserContext)
 	const [ email, setEmail] = useState('')
 	const [ password, setPassword ] = useState('')
+	const [ isActive, setIsActive ] = useState(false)
 
-	// For determining if button is disabled or not
-	const [isActive, setIsActive] = useState(false)
+	const retrieveUser = async (token) => {
+	  try {
+	    const response = await axios.get(`http://localhost:8001/users/details`, {
+	      headers: {
+	        Authorization: `Bearer ${token}`
+	      }
+	    });
+	    const result = response.data;
+	    setUser({
+	      id: result._id,
+	      isAdmin: result.isAdmin,
+	      email: result.email
+	    });
+	  } catch (error) {
+	    console.error('An error occurred while retrieving the user:', error);
+	  }
+	};
 
-	const retrieveUser = (token) => {
-		//fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
-		fetch(`http://localhost:8001/users/details`, {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		})
-		.then(response => response.json())
-		.then(result => {
-			console.log('This is result:')
-			console.log(result)
+	const authenticate = async (event) => {
+	  event.preventDefault();
 
-			// Store the user details retrieved from the token into the global user state
-			setUser({
-				id: result._id,
-				isAdmin: result.isAdmin,
-				email: result.email
-			})
-		})
-	}
+	  try {
+	    const response = await axios.post(`http://localhost:8001/users/login`, {
+	      email: email,
+	      password: password
+	    });
+	    const result = response.data;
 
+	    if (typeof result.accessToken !== 'undefined') {
+	      localStorage.setItem('token', result.accessToken);
+	      await retrieveUser(result.accessToken);
 
-	function authenticate(event) {
-	    event.preventDefault();
-	    
+	      Swal.fire({
+	        title: 'Login Successful!',
+	        text: 'Welcome to TIT4N 24!',
+	        confirmButtonColor: '#3b444b',
+	        confirmButtonText: 'OK!'
+	      });
 
-	    fetch(`http://localhost:8001/users/login`, {
-	        method: 'POST',
-	        headers: {
-	            'Content-Type': 'application/json'
-	        },
-	        body: JSON.stringify({
-	            email: email,
-	            password: password
-	        })
-	    })
-	    .then(response => response.json())
-	    .then(result => {
-	        if(typeof result.accessToken !== "undefined") {
-	            localStorage.setItem('token', result.accessToken);
+	    } else {
+	      Swal.fire({
+	        title: 'Authentication Failed!',
+	        text: 'Incorrect email or password!',
+	        confirmButtonColor: '#ff0000',
+	        confirmButtonText: 'Again!'
+	      });
+	      setEmail('');
+	      setPassword('');
+	    }
 
-	            retrieveUser(result.accessToken);
-
-	            Swal.fire({
-	                title: 'Login Successful!',
-	                text: 'Welcome to TIT4N 24!',
-	                confirmButtonColor: '#3b444b',
-	                confirmButtonText: 'OK!'
-	            });
-
-	        } else {
-	            Swal.fire({
-	                title: 'Authentication Failed!',
-	                text: "Incorrect email or password!",
-	                confirmButtonColor: '#ff0000',
-	                confirmButtonText: 'Again!'
-	            });
-	        }
-	    })
-	}
-
+	  } catch (error) {
+	    Swal.fire({
+	      title: 'Authentication Failed!',
+	      text: 'An error occurred!',
+	      confirmButtonColor: '#ff0000',
+	      confirmButtonText: 'Again!'
+	    });
+	    console.error('An error occurred during authentication:', error);
+	  }
+	};
 
 	useEffect(() => {
 	  if (email !== '' && password.length >= 8) {
-	    // Guarantees that the email is not blank and password is 8 characters or more
-	    // Enables the submit button if the form data has been verified
 	    setIsActive(true);
 	  } else {
 	    setIsActive(false);
@@ -91,13 +93,13 @@ export default function Register() {
 	return (
 		
 		(user.id !== null) ?
-		<Navigate to="/account"/>
+		<Navigate to="/"/>
 	  	: 
 		<Container>
 		    <Row className="w-100">
 		      <Col xs={12} md={6} lg={4} className="mx-auto">
 				  <Form onSubmit={event => authenticate(event)}>
-				    <h1 className="loginTitle">LOGIN</h1>
+				    <h1 className="loginTitle pb-4">LOGIN</h1>
 				    <Form.Group controlId="userEmail">
 				      <Form.Label className="loginSub">Email</Form.Label>
 				      <Form.Control 
@@ -115,7 +117,7 @@ export default function Register() {
 				      <Form.Label className="loginSub">Password</Form.Label>
 				      <Form.Control 
 				      	autoComplete="off"
-				        className="loginText mb-4"
+				        className="loginText mb-3"
 				        type="password" 
 				        placeholder="Password" 
 				        value={password} 
@@ -124,24 +126,23 @@ export default function Register() {
 				      />
 				    </Form.Group>
 
-				    { isActive ? 
-				      <Button className="btnWhite px-5" variant="dark" type="submit" id="submitBtn">
-				        SIGN IN
-				      </Button>
-				      :
-				      <Button className=" px-5" variant="dark" type="submit" id="submitBtn" disabled>
-				        SIGN IN
-				      </Button>
+				    <CustomBlkButton 
+				      label="Sign In"
+				      onClick={() => {}}
+				      type="submit"
+				      disabled={!isActive}
+				      variant="black"
+				      customClass="px-5" // If you need additional custom classes
+				    />
 
-				    }
-
-				    <Form.Group className="py-3">
-				      <Link to="/register" className="btnBlack text-decoration-none">Register</Link>
-				      <Link to="/recover" className="btnBlack1 text-decoration-none">Forgot Password?</Link>
+				    <Form.Group className="py-3 d-flex justify-content-between">
+				        <Link to="/register" className="text-decoration-none loginText">Register</Link>
+				        <Link to="/recover" className="text-decoration-none loginText">Forgot Password?</Link>
 				    </Form.Group>
 				  </Form>
 				</Col>
 			</Row>
 		</Container>
 	)
+
 }

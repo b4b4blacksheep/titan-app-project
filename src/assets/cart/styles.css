@@ -1,0 +1,27 @@
+
+.cart-title {
+  font-size: 26px !important;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 900 !important;
+} 
+
+.cart-name {
+  font-size: 16px !important;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.cart-description {
+  font-family: 'Oswald', 'Noto Sans', sans-serif;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: black;
+  margin: 0;
+}
+
+.cart-subtotal {
+  font-family: 'Oswald', 'Noto Sans', sans-serif;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  color: black;
+}
+

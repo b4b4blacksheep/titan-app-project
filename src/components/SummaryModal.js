@@ -1,14 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import React from 'react';
+import { Modal, Table } from 'react-bootstrap';
+import { RiCheckboxCircleFill } from 'react-icons/ri';
 
-import '../assets/summary-modal/styles.css';
 
-import UserContext from '../UserContext';
+import '../assets/admin/styles.css';
+
 import Swal from 'sweetalert2';
 
 export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, imageLinks, clearAllFields }) {
-
-  const { user, setUser } = useContext(UserContext)
 
   const linkOnlyArray = imageLinks.map(item => item.link);
 
@@ -38,7 +37,7 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
       .then(response => response.json())
       .then(result => {
         console.log(result)
-          if (result.message === 'New product successfully created!' || result.message == 'New product successfully created!') {
+          if (result.message === 'New product successfully created!' || result.message === 'New product successfully created!') {
             Swal.fire({
                 title: 'Product successfully added!',
                 text: 'Item should now be available.',
@@ -64,60 +63,63 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
   return (
     <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Product Summary</Modal.Title>
+        <Modal.Title className="tableLabel text-dark">Product Summary</Modal.Title>
       </Modal.Header>
       <Modal.Body>
 
-        <Table bordered hover>
+        <Table striped bordered hover>
           <thead>
-            <tr>
+            <tr className="tableLabel">
               <th>Field</th>
-              <th>Value</th>
+              <th>Details</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Name</td>
-              <td className="adminText">{formData.productName}</td>
+              <td className="summaryLabel">Name</td>
+              <td className="summaryType">{formData.productName}</td>
             </tr>
             <tr>
-              <td>Brand</td>
-              <td className="adminText">{formData.productBrand}</td>
+              <td className="summaryLabel">Brand</td>
+              <td className="summaryType">{formData.productBrand}</td>
             </tr>
             <tr>
-              <td>SKU</td>
-              <td className="adminText">{formData.productSKU}</td>
+              <td className="summaryLabel">SKU</td>
+              <td className="summaryType">{formData.productSKU}</td>
             </tr>
             <tr>
-              <td>Category</td>
-              <td className="adminText">{formData.productCategory}</td>
+              <td className="summaryLabel">Category</td>
+              <td className="summaryType">{formData.productCategory}</td>
             </tr>
             <tr>
-              <td>Color</td>
-              <td className="adminText">{formData.productColor}</td>
+              <td className="summaryLabel">Color</td>
+              <td className="summaryType">{formData.productColor}</td>
             </tr>
             <tr>
-              <td>Description</td>
-              <td className="adminText">{formData.productDescription}</td>
+              <td className="summaryLabel">Description</td>
+              <td className="summaryType">{formData.productDescription}</td>
             </tr>
             <tr>
-              <td>Status</td>
-              <td className="adminText">{formData.productStatus}</td>
+              <td className="summaryLabel">Status</td>
+              <td className="summaryType">{formData.productStatus}</td>
             </tr>
-            <tr className="text-danger">
-              <td>On-Sale Value</td>
-              <td className="adminText fw-bold">{formData.onSaleValue}</td>
+            {/* Conditionally render On-Sale Value row */}
+            {formData.productStatus === 'On-Sale' && (
+              <tr className="text-danger">
+                <td className="summaryLabel">On-Sale Value</td>
+                <td className="summaryType fw-bold">{formData.onSaleValue}</td>
+              </tr>
+            )}
+            <tr>
+              <td className="summaryLabel">Price</td>
+              <td className="summaryType">{formData.productPrice}</td>
             </tr>
             <tr>
-              <td>Price</td>
-              <td className="adminText">{formData.productPrice}</td>
-            </tr>
-            <tr>
-              <td>Image Links</td>
+              <td className="summaryLabel">Image Links</td>
               <td>
                 <ul>
                   {imageLinks && imageLinks.map((imageLink, index) => (
-                    <li className="adminText" key={index}>{imageLink.link}</li>
+                    <li className="summaryType" key={index}>{imageLink.link}</li>
                   ))}
                 </ul>
               </td>
@@ -125,10 +127,9 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
 
           </tbody>
         </Table>
-        <h4>Sizes</h4>
-        <Table bordered hover>
+        <Table striped bordered hover>
           <thead>
-            <tr>
+            <tr className="tableLabel">
               <th>Size</th>
               <th>Quantity</th>
             </tr>
@@ -136,8 +137,8 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
           <tbody>
             {sizes.map((size, index) => (
               <tr key={index}>
-                <td className="adminText">{size.size}</td>
-                <td className="adminText">{size.quantity}</td>
+                <td className="summaryType">{size.size}</td>
+                <td className="summaryType">{size.quantity}</td>
               </tr>
             ))}
           </tbody>
@@ -146,16 +147,15 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
       </Modal.Body>
 
       <Modal.Footer>
-        <Button 
-          variant="dark" 
+        <RiCheckboxCircleFill 
+          size={30} 
+          color="green"
           onClick={() => { 
             handleConfirm(); 
             clearAllFields(); 
             onHide();
           }} 
-        >
-          Confirm
-        </Button>
+        />
       </Modal.Footer>
     </Modal>
   );

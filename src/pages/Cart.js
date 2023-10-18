@@ -9,6 +9,8 @@ import CustomBlkButton from '../components/CustomBlkButton';
 
 import '../assets/cart/styles.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Cart = () => {
   const { user } = useContext(UserContext);
   const [ cart ] = useState("You haven't placed any orders yet.");
@@ -29,7 +31,8 @@ const Cart = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8001/cart/get-cart', {
+        //const response = await axios.get('http://localhost:8001/cart/get-cart', {
+        const response = await axios.get(`${apiUrl}/cart/get-cart`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -53,7 +56,7 @@ const Cart = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await axios.delete(`http://localhost:8001/cart/remove-item/${itemId}`, {
+      const response = await axios.delete(`${apiUrl}/cart/remove-item/${itemId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

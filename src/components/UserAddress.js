@@ -4,6 +4,8 @@ import axios from 'axios';
 
 import '../assets/admin-panel/styles.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const DeleteAddress = async (addressId, token) => {
   try {
     const config = {
@@ -13,7 +15,8 @@ const DeleteAddress = async (addressId, token) => {
         },
     };
 
-    const response = await axios.delete("http://localhost:8001/users/remove-address",
+    //const response = await axios.delete("http://localhost:8001/users/remove-address",
+    const response = await axios.delete(`${apiUrl}/users/remove-address`,
       config
     );
     console.log(response)
@@ -32,8 +35,8 @@ const UserAddress = ({ token, addedNew, setAddedNew }) => {
 
   useEffect(() => {
       // Fetch the addresses here
-      axios
-        .get('http://localhost:8001/users/address', {
+        //axios.get('http://localhost:8001/users/address', {
+      axios.get(`${apiUrl}/users/address`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -57,7 +60,8 @@ const UserAddress = ({ token, addedNew, setAddedNew }) => {
         data: { addressId: addressId }, // include the addressId in the request body
       };
 
-      const response = await axios.delete("http://localhost:8001/users/remove-address", config);
+      // const response = await axios.delete("http://localhost:8001/users/remove-address", config);
+      const response = await axios.delete(`${apiUrl}/users/remove-address`, config);
       return response.data;
     } catch (error) {
       throw error;

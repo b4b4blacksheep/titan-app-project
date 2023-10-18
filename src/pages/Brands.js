@@ -8,6 +8,8 @@ import CustomBlkButton from '../components/CustomBlkButton';
 import Breadcrumbs from '../components/Breadcrumb';
 const ProductCard = lazy(() => import('../components/ProductCard'));
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Brands = () => {
   useEffect(() => {
     AOS.init();
@@ -30,7 +32,8 @@ const Brands = () => {
     setIsLoading(true);
     Promise.all(
       brandNames.map((brand) =>
-        axios.get(`http://localhost:8001/brands/${brand.toLowerCase()}`)
+        //axios.get(`http://localhost:8001/brands/${brand.toLowerCase()}`)
+        axios.get(`${apiUrl}/brands/${brand.toLowerCase()}`)
       )
     )
       .then((responses) => {

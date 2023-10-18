@@ -11,6 +11,8 @@ import Breadcrumbs from '../components/Breadcrumb';
 
 import '../assets/footwear/styles.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Footwear = () => {
   useEffect(() => {
     AOS.init();
@@ -30,7 +32,7 @@ const Footwear = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    axios.get('http://localhost:8001/products/footwear')
+    axios.get(`${apiUrl}/products/footwear`)
       .then(response => {
         setProducts(response.data);
         setIsLoading(false);

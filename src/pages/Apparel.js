@@ -11,6 +11,8 @@ import Breadcrumbs from '../components/Breadcrumb';
 
 import '../assets/apparel/styles.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Apparel = () => {
   useEffect(() => {
     AOS.init();
@@ -29,7 +31,8 @@ const Apparel = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    axios.get('http://localhost:8001/products/apparel')
+      //axios.get('http://localhost:8001/products/apparel')
+    axios.get(`${apiUrl}/products/apparel`)
       .then(response => {
         setProducts(response.data);
         setIsLoading(false);

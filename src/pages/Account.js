@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 import UserContext from '../UserContext';
 import useFetchUserDetails from '../components/useFetchUserDetails';

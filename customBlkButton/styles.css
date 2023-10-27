@@ -1,0 +1,86 @@
+.custom-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .custom-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .custom-button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .custom-button {
+    font-size: 18px;
+    padding: 12px 24px;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .custom-button {
+    font-size: 20px;
+    padding: 14px 28px;
+  }
+}
+
+.custom-button.default {
+  background-color: #007bff;
+  color: white;
+}
+
+.custom-button.black {
+  background-color: #030300;
+  color: white;
+  margin: 1.5px 0;
+  font-size: 14px;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.custom-button.light {
+  background-color: white;
+  color: black;
+  margin: 1.5px 0;
+  font-size: 12px;
+  border: 1px solid black;
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.custom-button.white {
+  background-color: white;
+  color: black;
+  margin: 1.5px 0;
+  font-size: 14px;
+  font-family: 'Bebas Neue', sans-serif;
+  border: 1px solid black;
+  border-radius: 0;
+}
+
+.custom-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.custom-button:hover {
+  opacity: 0.9;
+}
+
+body {
+  overscroll-behavior: none !important;
+  overflow-x: hidden !important;
+}

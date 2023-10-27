@@ -1,0 +1,23 @@
+.account-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.my-account {
+  font-size: 24px !important;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.text {
+  font-size: 16px !important;
+  font-family: 'Arial Narrow', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.account-h1 {
+  font-size: 32px !important;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.5px;
+}

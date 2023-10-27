@@ -13,7 +13,7 @@ const Account = () => {
   const { user, unsetUser } = useContext(UserContext);
   const { loading, data, error } = useFetchUserDetails(user.id);
 
-  const [ orders, setOrders ] = useState("You haven't placed any orders yet.");
+  const [ orders ] = useState("You haven't placed any orders yet.");
 
   useEffect(() => {
     if (!user.id) {

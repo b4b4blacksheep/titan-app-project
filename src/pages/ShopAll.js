@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import AOS from 'aos';
@@ -8,6 +8,8 @@ import 'aos/dist/aos.css';
 import CustomBlkButton from '../components/CustomBlkButton';
 
 import Breadcrumbs from '../components/Breadcrumb';
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const ShopAll = () => {
   useEffect(() => {
@@ -27,7 +29,8 @@ const ShopAll = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    axios.get('http://localhost:8001/products/shop-all')
+    //axios.get('http://localhost:8001/products/shop-all')
+    axios.get(`${apiUrl}/products/shop-all`)
       .then(response => {
         setProducts(response.data);
         setIsLoading(false);

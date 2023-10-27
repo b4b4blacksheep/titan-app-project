@@ -27,6 +27,7 @@ const About = lazy(() => import('./pages/About'));
 const PageStoreLocator = lazy(() => import('./components/PageStoreLocator'));
 const PageBarbershop = lazy(() => import('./components/PageBarbershop'));
 const PageCareers = lazy(() => import('./components/PageCareers'));
+const Faqs = lazy(() => import('./components/Faqs'));
 
 const PageSizeGuide = lazy(() => import('./components/PageSizeGuide'));
 
@@ -72,6 +73,7 @@ function App() {
                   <Route path="/pages/store-locator" element={<PageStoreLocator />}/>
                   <Route path="/pages/barbershop" element={<PageBarbershop />}/>
                   <Route path="/pages/careers" element={<PageCareers />}/> 
+                  <Route path="/pages/faqs" element={<Faqs />}/> 
 
                   <Route path="/pages/size-guide" element={<PageSizeGuide />}/>   
 

@@ -5,7 +5,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 // Import Components
 import UserAddress from '../components/UserAddress';
 import RegisterAddress from '../components/RegisterAddress';
-import CustomBlkButton from '../components/CustomBlkButton';
 
 // Import Contexts
 import UserContext from '../UserContext';

@@ -12,6 +12,7 @@ import CustomBlkButton from '../components/CustomBlkButton';
 
 import '../assets/login/styles.css';
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export default function Login() {
 
@@ -22,7 +23,7 @@ export default function Login() {
 
 	const retrieveUser = async (token) => {
 	  try {
-	    const response = await axios.get(`http://localhost:8001/users/details`, {
+	    const response = await axios.get(`${apiUrl}/users/details`, {
 	      headers: {
 	        Authorization: `Bearer ${token}`
 	      }
@@ -42,7 +43,7 @@ export default function Login() {
 	  event.preventDefault();
 
 	  try {
-	    const response = await axios.post(`http://localhost:8001/users/login`, {
+	    const response = await axios.post(`${apiUrl}/users/login`, {
 	      email: email,
 	      password: password
 	    });

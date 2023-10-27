@@ -12,8 +12,8 @@ export default function SummaryModal({ show, onHide, formData, sizes, isOnSale, 
   const linkOnlyArray = imageLinks.map(item => item.link);
 
   const handleConfirm = () => {
-      
-      fetch(`http://localhost:8001/products/create-product`, {
+
+      fetch(`${process.env.REACT_APP_API_URL}/products/create-product`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

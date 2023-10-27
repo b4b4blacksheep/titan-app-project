@@ -15,7 +15,7 @@ const Footwear = () => {
       const token = localStorage.getItem('token');
 
       try {
-        const response = await fetch('http://localhost:8001/products/footwear/all', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/products/footwear/all`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

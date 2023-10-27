@@ -99,7 +99,8 @@ function ProductsAdmin() {
   useEffect(() => {
     setIsLoading(true);
     
-    fetch(`http://localhost:8001/products/${selectedLink}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/products/${selectedLink}`, {
+    //fetch(`http://localhost:8001/products/${selectedLink}`, {
     	method: 'GET',
     	headers: {
     	  'Content-Type': 'application/json',

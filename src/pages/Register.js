@@ -9,6 +9,8 @@ import CustomBlkButton from '../components/CustomBlkButton';
 import UserContext from '../UserContext';
 import Swal from 'sweetalert2';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export default function Register() {
 
   const { user } = useContext(UserContext)
@@ -33,7 +35,8 @@ export default function Register() {
   function registerUser(event) {
     event.preventDefault();
 
-    axios.post('http://localhost:8001/users/check-email', {
+    //axios.post('http://localhost:8001/users/check-email', {
+    axios.post(`${apiUrl}/users/check-email`, {
       email: email
     })
     .then(response => {
@@ -48,7 +51,8 @@ export default function Register() {
         });
         navigate('/login');
       } else {
-        return axios.post('http://localhost:8001/users/register', {
+        //return axios.post('http://localhost:8001/users/register', {
+        return axios.post(`${apiUrl}/users/register`, {
           firstName: firstName,
           lastName: lastName,
           mobileNo: mobileNumber,

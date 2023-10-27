@@ -13,7 +13,7 @@ export default function SizeSelect({ setSelectedSize }) {
   const [sizes, setSizes] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8001/products/${productId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
       .then(response => response.json())
       .then(result => {
         const flattenedSizes = result.sizes.flat().map(s => ({

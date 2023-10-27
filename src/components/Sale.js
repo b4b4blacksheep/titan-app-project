@@ -10,7 +10,7 @@ const Sale = () => {
   useEffect(() => {
     setIsLoading(true);
     
-    fetch('http://localhost:8001/products/sale')
+    fetch(`${process.env.REACT_APP_API_URL}/products/sale`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

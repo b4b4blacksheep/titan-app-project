@@ -15,7 +15,7 @@ import '../assets/home/styles.css';
 
 export default function Home() {
   
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <div>

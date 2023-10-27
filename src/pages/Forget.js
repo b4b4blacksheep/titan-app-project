@@ -19,8 +19,7 @@ export default function CheckEmail() {
 	function authenticate(event){
 		event.preventDefault()
 		
-		//fetch(`${process.env.REACT_APP_API_URL}/users/check-email`,{
-		fetch(`http://localhost:8001/users/check-email`,{
+		fetch(`${process.env.REACT_APP_API_URL}/users/check-email`,{
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

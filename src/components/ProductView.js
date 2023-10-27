@@ -43,8 +43,8 @@ export default function ProductView() {
 	];
 
 	useEffect(() => {
-		//fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
-		fetch(`http://localhost:8001/products/${productId}`)
+		fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`)
+		//fetch(`http://localhost:8001/products/${productId}`)
 			.then(response => response.json())
 			.then(result => {
 				setImageLinks(result.imageLinks);

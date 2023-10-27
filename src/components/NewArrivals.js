@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
+
+// Import Styles
+import '../assets/admin-panel/styles.css';
+
 const NewArrivals = () => {
   
   const [products, setProducts] = useState([]);
@@ -9,23 +14,19 @@ const NewArrivals = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    
-    fetch('http://localhost:8001/products/new-arrivals')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setProducts(data);
-        setIsLoading(false);
-      })
-      .catch(err => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/products/new-arrivals`);
+        setProducts(response.data);
+      } catch (err) {
         setError(err);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
 

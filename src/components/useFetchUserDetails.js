@@ -17,7 +17,7 @@ const useFetchUserDetails = () => {
 
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8001/users/details', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`

@@ -37,6 +37,8 @@ function App() {
     isAdmin: null,
   });
 
+  console.info("https://carloicorcuera.com/")
+
   const unsetUser = () => {
     localStorage.clear();
   };

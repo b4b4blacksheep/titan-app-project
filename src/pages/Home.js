@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 
 import UserContext from '../UserContext';
 
+import ElevenEleven from '../components/ElevenEleven.js';
 import Landing from '../components/Landing';
 import Adidas from '../components/Adidas';
 import Banner from '../components/Banner';
@@ -23,8 +24,9 @@ export default function Home() {
         <AdminPanel data-aos="fade-up" />
       ) : (
         <>
-          <div data-aos="fade-up"><Landing /></div>
+          <div data-aos="fade-up"><ElevenEleven /></div>
           <div data-aos="fade-left"><NewArrivals /></div>
+          <div data-aos="fade-up"><Landing /></div>
           <div data-aos="fade-right"><FeaturedCollections /></div>
           <div data-aos="fade-up"><Adidas /></div>
           <div data-aos="fade-right"><Sale /></div>

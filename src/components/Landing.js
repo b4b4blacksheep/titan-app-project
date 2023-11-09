@@ -9,7 +9,7 @@ import '../assets/landing/styles.css';
 const LandingPage = () => {
   return (
     <div className="video-container">
-      <video autoPlay loop muted className="background-video">
+      <video autoPlay loop muted className="background-video full-screen-video">
         <source src={VidLanding1} type="video/mp4" />
       </video>
       <div className="content text-center text-uppercase">
